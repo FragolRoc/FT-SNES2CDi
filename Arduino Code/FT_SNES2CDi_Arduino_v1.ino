@@ -1,7 +1,7 @@
 
 /*******************************
  *
- *  File: FT_Nano_v1.ino
+ *  FT_SNES2CDi_Arduino_v1.ino
  *  Description: software for the SNEStoCDi gamepad converter (allows to use a Nintendo SNES/SFC gamepad on a Philips CDi)
  *  Author: Laurent Berta
  *  Edited by: Fragol Roc for use ONLY with FragolTech SNES2CDi Adapter Board
