@@ -8,6 +8,8 @@ This PCB allows users to create their own controller adapter by soldering compon
 # FragolTech Specific Instructions
 Custom code for this adapter PCB is available in the Arduino Code folder above. Load the sketch and the SNESPad library into the Arduino IDE and flash it to your Nano or Nano clone. This adapter should work without further configuration, just plug and play!
 
+Please note that Nano clones may require a different configuration in the Arduino IDE. Check to make sure appropriate drivers are installed. If you have issues flashing the program, check your board settings and use the OLD version of the bootloader. If you have other issues, feel free to reachout to me at fragolroc@gmail.com
+
 # Assembly Instructions
 Coming Soon...
 
