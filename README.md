@@ -3,7 +3,7 @@ Original Project & Instructions: https://github.com/anarterb/SNEStoCDi
 
 This PCB allows users to create their own controller adapter by soldering components to one location. Using an SNES controller port and an Arduino Nano, you can choose to make a MiniDIN adapter. This is still a work in progress and has not been tested. Original documentation can be found in the author's GitHub.
 
-3D printed housing and a BOM will also be added to this GitHub in the future.
+3D printed housing and a BOM are now available (above and below).
 
 # FragolTech Specific Instructions
 Custom code for this adapter PCB is available in the Arduino Code folder above. Load the sketch and the SNESPad library into the Arduino IDE and flash it to your Nano or Nano clone. This adapter should work without further configuration, just plug and play!
