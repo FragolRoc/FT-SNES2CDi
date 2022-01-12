@@ -13,6 +13,9 @@ Custom code for this adapter PCB is available in the Arduino Code folder above. 
 Please note that Nano clones may require a different configuration in the Arduino IDE. Check to make sure appropriate drivers are installed. If you have issues flashing the program, check your board settings and use the OLD version of the bootloader. If you have other issues, feel free to reachout to me at fragolroc@gmail.com
 
 # Assembly
+
+*Assembly reference pictures can be found in the above folder.
+
 **PCB designs can be found at:**
   <br>OSH Park: https://oshpark.com/shared_projects/f0KiejEZ
   <br>EasyEDA:
