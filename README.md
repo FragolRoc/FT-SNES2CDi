@@ -12,7 +12,7 @@ Please note that Nano clones may require a different configuration in the Arduin
 
 # Assembly
 **PCB designs can be found at:**
-  <br>OSH Park:
+  <br>OSH Park: https://oshpark.com/shared_projects/f0KiejEZ
   <br>EasyEDA:
 
 **SNES Connectors:**<br>
