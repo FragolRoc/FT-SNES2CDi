@@ -23,3 +23,7 @@ https://www.digikey.com/en/products/detail/adam-tech/MDJ-008-FS/9832482
 
 **8 Pin Mini DIN Cables:** <br>
   https://www.kraydad.com/mini-din-minidin-8-pin-cables/
+
+**M2 or M2.5 Screws**
+<br>Use 8mm-10mm M2 or M2.5 screws for this project<br>
+https://www.amazon.com/m2-screws/s?k=m2+screws
