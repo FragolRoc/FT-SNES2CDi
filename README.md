@@ -1,7 +1,7 @@
 # SNES2CDi Controller Adapter
 Original Project & Instructions: https://github.com/anarterb/SNEStoCDi
 
-Small Batch Production Interest Form: 
+Small Batch Production Interest Form: https://forms.gle/BDZ2jHTWuCF3Lbzz9
 
 This PCB allows users to create their own controller adapter by soldering components to one location. Using an SNES controller port and an Arduino Nano, you can choose to make a MiniDIN adapter. This is still a work in progress and has not been tested. Original documentation can be found in the author's GitHub.
 
