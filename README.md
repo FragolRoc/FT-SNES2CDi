@@ -10,6 +10,13 @@ Custom code for this adapter PCB is available in the Arduino Code folder above. 
 
 Please note that Nano clones may require a different configuration in the Arduino IDE. Check to make sure appropriate drivers are installed. If you have issues flashing the program, check your board settings and use the OLD version of the bootloader. If you have other issues, feel free to reachout to me at fragolroc@gmail.com
 
-# Assembly Instructions
-Coming Soon...
+# Assembly
+**PCB designs can be found at:**
+  <br>OSH Park:
+  <br>EasyEDA:
 
+**SNES Connectors:**<br>
+https://bit.ly/34AOFBq
+
+**8 Pin Mini DIN Jack:**<br>
+https://www.digikey.com/en/products/detail/adam-tech/MDJ-008-FS/9832482
