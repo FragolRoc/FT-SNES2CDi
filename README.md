@@ -20,3 +20,6 @@ https://bit.ly/34AOFBq
 
 **8 Pin Mini DIN Jack:**<br>
 https://www.digikey.com/en/products/detail/adam-tech/MDJ-008-FS/9832482
+
+**8 Pin Mini DIN Cables:** <br>
+  https://www.kraydad.com/mini-din-minidin-8-pin-cables/
