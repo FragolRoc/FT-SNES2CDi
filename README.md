@@ -12,6 +12,9 @@ Custom code for this adapter PCB is available in the Arduino Code folder above. 
 
 Please note that Nano clones may require a different configuration in the Arduino IDE. Check to make sure appropriate drivers are installed. If you have issues flashing the program, check your board settings and use the OLD version of the bootloader. If you have other issues, feel free to reachout to me at fragolroc@gmail.com
 
+# Known Issues
+The current iteration of the SNEStoCDi code does not support the SNES mouse or other pointing devices. This is currently being worked on and will be available in a future software revision.
+
 # Assembly
 
 *Assembly reference pictures can be found in the above folder.
