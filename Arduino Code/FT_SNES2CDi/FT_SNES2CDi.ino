@@ -13,7 +13,7 @@
  ******************************/
 
 #include <SoftwareSerial.h>
-#include <SNESpad.h>
+#include "SNESpad.h"
 #include <EEPROM.h>
 
 SNESpad pad = SNESpad(5, 6, 7); // Create a SNESpad instance, change the pin values to match your wiring (latch, clock, data)
