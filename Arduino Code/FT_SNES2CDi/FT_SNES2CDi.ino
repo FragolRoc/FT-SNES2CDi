@@ -22,7 +22,7 @@ const int RTSpin = 5; // the number of the analog pin used to receive the RTS si
 const int ledPin = 13; // the number of the inboard LED pin
 
 const int RTSthreshold = 328; // threshold for the CDi RTS analog detection
-uint16_t btns;
+uint32_t btns;
 bool btnRpressed = false;
 int padbyte0, padbyte1, padbyte2, oldpadbyte0, oldpadbyte1, oldpadbyte2, x, y;
 byte spd;
@@ -55,7 +55,7 @@ void loop()
     if(firstId) delay(100);
     else delay(1);
     firstId = false;
-    vSerial.write(0b11001010); // send device id ("maneuvering device")
+    vSerial.write(0b11001101); // send device id ("relative device")
   }
   digitalWrite(ledPin, LOW);
 
@@ -81,9 +81,27 @@ void loop()
 
   // Dpad X axis
   x = 127;
-  if(btns & SNES_LEFT) x = 254;
-  if(btns & SNES_RIGHT) x = 1;
-  x = adjustSpeed(x);
+  if (!SNES_MOUSE) {
+    if(btns & SNES_LEFT) x = 254;
+    if(btns & SNES_RIGHT) x = 1;
+    x = adjustSpeed(x);
+  } else {
+    x = 0;
+    if (btns & SNES_MOUSE_X_0) x = x + 1;
+    if (btns & SNES_MOUSE_X_1) x = x + 2;
+    if (btns & SNES_MOUSE_X_2) x = x + 4;
+    if (btns & SNES_MOUSE_X_3) x = x + 8;
+    if (btns & SNES_MOUSE_X_4) x = x + 16;
+    if (btns & SNES_MOUSE_X_5) x = x + 32;
+    if (btns & SNES_MOUSE_X_6) x = x + 64;
+
+    if (x < 2) {
+      x = 127;
+    } else {
+      if (btns & SNES_MOUSE_X_SIGN) x = x + 127;
+      else x = 127 - x;
+    }
+  }
   
   if(x<127) // right
   {
@@ -108,9 +126,27 @@ void loop()
 
   // Dpad Y axis
   y = 127;
-  if(btns & SNES_UP) y = 254;
-  if(btns & SNES_DOWN) y = 1;
-  y = adjustSpeed(y);
+  if (!SNES_MOUSE) { // controller
+    if(btns & SNES_UP) y = 254;
+    if(btns & SNES_DOWN) y = 1;
+    y = adjustSpeed(y);
+  } else { // mouse
+    y = 0;
+    if (btns & SNES_MOUSE_Y_0) y = y + 1;
+    if (btns & SNES_MOUSE_Y_1) y = y + 2;
+    if (btns & SNES_MOUSE_Y_2) y = y + 4;
+    if (btns & SNES_MOUSE_Y_3) y = y + 8;
+    if (btns & SNES_MOUSE_Y_4) y = y + 16;
+    if (btns & SNES_MOUSE_Y_5) y = y + 32;
+    if (btns & SNES_MOUSE_Y_6) y = y + 64;
+
+    if (y < 2) {
+      y = 127;
+    } else {
+      if (btns & SNES_MOUSE_Y_SIGN) y = y + 127;
+      else y = 127 - y;
+    }
+  }
 
   if(y<127) // down
   {
@@ -139,15 +175,21 @@ void loop()
     btnSEpressed = true;
   }
   else btnSEpressed = false;
-  if(standardMapping) {
-    if(btns & SNES_Y) padbyte0 = padbyte0 | 0b00100000;  //button 1 (Y)
-    if(btns & SNES_B) padbyte0 = padbyte0 | 0b00010000;  //button 2 (B)
+
+  if (!SNES_MOUSE) {
+    if(standardMapping) {
+      if(btns & SNES_Y) padbyte0 = padbyte0 | 0b00100000;  //button 1 (Y)
+      if(btns & SNES_B) padbyte0 = padbyte0 | 0b00010000;  //button 2 (B)
+    }
+    else {
+      if(btns & SNES_B) padbyte0 = padbyte0 | 0b00100000;  //button 1 (B)
+      if(btns & SNES_Y) padbyte0 = padbyte0 | 0b00010000;  //button 2 (Y)
+    }
+    if((btns & SNES_X) || (btns & SNES_A)) padbyte0 = padbyte0 | 0b00110000; // button 3 (A or X)
+  } else {
+    if(btns & SNES_X) padbyte0 = padbyte0 | 0b00100000; // button 1 (X)
+    if(btns & SNES_A) padbyte0 = padbyte0 | 0b00010000; // button 2 (A)
   }
-  else {
-    if(btns & SNES_B) padbyte0 = padbyte0 | 0b00100000;  //button 1 (B)
-    if(btns & SNES_Y) padbyte0 = padbyte0 | 0b00010000;  //button 2 (Y)
-  }
-  if((btns & SNES_X) || (btns & SNES_A)) padbyte0 = padbyte0 | 0b00110000; // button 3 (A or X)
 
   if((padbyte0 != oldpadbyte0) || (padbyte1 != 0b10000000) || (padbyte2 != 0b10000000) || ((padbyte0 & 0b00001111) != 0))  // see if state has changed
   {     
