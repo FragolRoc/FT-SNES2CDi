@@ -65,7 +65,6 @@ class SNESpad {
   private:
     void strobe();
     uint32_t shiftin();
-    uint32_t shiftin32();
     int m_strobe, m_clock, m_data;
 
 };

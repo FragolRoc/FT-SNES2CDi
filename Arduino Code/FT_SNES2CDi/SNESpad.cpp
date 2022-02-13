@@ -53,8 +53,7 @@ uint32_t SNESpad::buttons(void)
   byte i;
   strobe();
   for (i = 0; i < 32; i++) {
-    if (i<16) ret |= shiftin() << i;
-    else ret |= shiftin32() << i;
+    ret |= shiftin() << i;
   }
   return ~ret;
 }
@@ -63,35 +62,16 @@ void SNESpad::strobe(void)
 {
   digitalWrite(m_strobe,HIGH);
   delayMicroseconds(12);
-
-  // mouse speed stop
-  digitalWrite(m_clock,HIGH);
-  delayMicroseconds(12);
-  digitalWrite(m_clock,LOW);
-  delayMicroseconds(12);
-  digitalWrite(m_clock,HIGH);
-  delayMicroseconds(12);
-  digitalWrite(m_clock,LOW);
-
   digitalWrite(m_strobe,LOW);
+  delayMicroseconds(6);
 }
 
 uint32_t SNESpad::shiftin(void)
 {
-  uint32_t ret = digitalRead(m_data);
-  delayMicroseconds(12);
-  digitalWrite(m_clock,HIGH);
-  delayMicroseconds(12);
   digitalWrite(m_clock,LOW);
-  return ret;
-}
-
-uint32_t SNESpad::shiftin32(void)
-{
+  delayMicroseconds(6);
   uint32_t ret = digitalRead(m_data);
-  delayMicroseconds(0.5);
   digitalWrite(m_clock,HIGH);
-  delayMicroseconds(8);
-  digitalWrite(m_clock,LOW);
+  delayMicroseconds(6);
   return ret;
 }
