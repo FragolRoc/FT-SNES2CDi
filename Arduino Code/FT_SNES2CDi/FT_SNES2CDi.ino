@@ -30,6 +30,7 @@ bool firstId = true;
 bool btnLpressed = false;
 bool btnSEpressed = false;
 bool standardMapping = true;
+bool debugging = false;
 
 // init
 void setup()
@@ -44,6 +45,8 @@ void setup()
   
   pinMode(ledPin, OUTPUT);
   vSerial.begin(1200); // open serial interface to send data to the CDi
+
+  if (debugging) Serial.begin(38400);
 }
 
 // main
@@ -137,6 +140,18 @@ void loop()
       padbyte0 = padbyte0 | 0b00000100;
     if((y & 0b10000000) != 0)
       padbyte0 = padbyte0 | 0b00001000;
+  }
+
+  // MOUSE DEBUG
+  if (debugging && (x != 127 || y != 127)) {
+    String xDirection = "";
+    if (btns & SNES_MOUSE_X_SIGN) xDirection = "< ";
+    else xDirection = "> ";
+    String yDirection = "";
+    if (btns & SNES_MOUSE_Y_SIGN) yDirection = "/\\ ";
+    else yDirection = "\\/ ";
+    byte TwosComplement = ~x + 1;
+    Serial.println("{ x: " + xDirection + String(TwosComplement) + ", y: " + yDirection + String(y) + " }");
   }
 
   // buttons
