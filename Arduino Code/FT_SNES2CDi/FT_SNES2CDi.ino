@@ -94,34 +94,19 @@ void loop()
     if (btns & SNES_MOUSE_X_4) x = x + 16;
     if (btns & SNES_MOUSE_X_5) x = x + 32;
     if (btns & SNES_MOUSE_X_6) x = x + 64;
-
-    if (x < 2) {
-      x = 127;
-    } else {
-      if (btns & SNES_MOUSE_X_SIGN) x = x + 127;
-      else x = 127 - x;
-    }
+    if (btns & SNES_MOUSE_X_SIGN) x = 127 + x;
+    else x = 127 - x;
   }
   
-  if(x<127) // right
-  {
+  if(x!=127) {
     x = x ^ 0b01111111;
     x = x + 1;
     padbyte1 = padbyte1 | x;
     padbyte1 = padbyte1 & 0b10111111;
     if((x & 0b01000000) != 0)
       padbyte0 = padbyte0 | 0b00000001;
-  }
-  else if(x>127) // left
-  {
-    x = x ^ 0b01111111;
-    x = x + 1;
-    padbyte1 = padbyte1 | x;
-    padbyte1 = padbyte1 & 0b10111111;
-    if((x & 0b01000000) != 0)
-      padbyte0 = padbyte0 | 0b00000011;
-    else
-      padbyte0 = padbyte0 | 0b00000010; 
+    if((x & 0b10000000) != 0)
+      padbyte0 = padbyte0 | 0b00000010;
   }
 
   // Dpad Y axis
@@ -139,33 +124,18 @@ void loop()
     if (btns & SNES_MOUSE_Y_4) y = y + 16;
     if (btns & SNES_MOUSE_Y_5) y = y + 32;
     if (btns & SNES_MOUSE_Y_6) y = y + 64;
-
-    if (y < 2) {
-      y = 127;
-    } else {
-      if (btns & SNES_MOUSE_Y_SIGN) y = y + 127;
-      else y = 127 - y;
-    }
+    if (btns & SNES_MOUSE_Y_SIGN) y = 127 + y;
+    else y = 127 - y;
   }
 
-  if(y<127) // down
-  {
+  if(y!=127) {
     y = y ^ 0b01111111;
     y = y + 1;
     padbyte2 = padbyte2 | y;
     padbyte2 = padbyte2 & 0b10111111;
     if((y & 0b01000000) != 0)
       padbyte0 = padbyte0 | 0b00000100;
-  }
-  else if(y>127) // up
-  {
-    y = y ^ 0b01111111;
-    y = y + 1;
-    padbyte2 = padbyte2 | y;
-    padbyte2 = padbyte2 & 0b10111111;
-    if((y & 0b01000000) != 0)
-      padbyte0 = padbyte0 | 0b00001100;
-    else
+    if((y & 0b10000000) != 0)
       padbyte0 = padbyte0 | 0b00001000;
   }
 
