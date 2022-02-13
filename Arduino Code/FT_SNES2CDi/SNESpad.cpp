@@ -53,8 +53,13 @@ uint32_t SNESpad::buttons(void)
   byte i;
   strobe();
   for (i = 0; i < 32; i++) {
-    ret |= shiftin() << i;
+    uint32_t shiftBit = shiftin();
+    ret |= shiftBit << i;
+
+    // stop read if not a mouse
+    if (i == 15 && shiftBit) break;
   }
+
   return ~ret;
 }
 
