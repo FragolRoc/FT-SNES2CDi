@@ -103,7 +103,6 @@ void loop()
   
   if(x!=127) {
     x = x ^ 0b01111111;
-    x = x + 1;
     padbyte1 = padbyte1 | x;
     padbyte1 = padbyte1 & 0b10111111;
     if((x & 0b01000000) != 0)
@@ -133,7 +132,6 @@ void loop()
 
   if(y!=127) {
     y = y ^ 0b01111111;
-    y = y + 1;
     padbyte2 = padbyte2 | y;
     padbyte2 = padbyte2 & 0b10111111;
     if((y & 0b01000000) != 0)
