@@ -37,6 +37,7 @@
 #define SNES_X              0x200      // 0b0000000000000000 0000001000000000
 #define SNES_L              0x400      // 0b0000000000000000 0000010000000000
 #define SNES_R              0x800      // 0b0000000000000000 0000100000000000
+#define SNES_MOUSE_SPEED    0xC00      // 0b0000000000000000 0000110000000000
 #define SNES_PAD_ID_3       0x1000     // 0b0000000000000000 0001000000000000
 #define SNES_PAD_ID_2       0x2000     // 0b0000000000000000 0010000000000000
 #define SNES_PAD_ID_1       0x4000     // 0b0000000000000000 0100000000000000
@@ -58,17 +59,22 @@
 #define SNES_MOUSE_X_1      0x40000000 // 0b0100000000000000 0000000000000000
 #define SNES_MOUSE_X_0      0x80000000 // 0b1000000000000000 0000000000000000
 
+#define SNES_MOUSE_SLOW     0
+#define SNES_MOUSE_MEDIUM   1
+#define SNES_MOUSE_FAST     2
+
 class SNESpad {
 
   public:
     SNESpad();
     SNESpad(int strobe, int clock, int data);
-    uint32_t buttons();
+    uint32_t buttons(int speed);
 
   private:
-    void strobe();
+    void strobe(int speed);
     uint32_t shiftin();
     int m_strobe, m_clock, m_data;
+    int mouse_speed = -1, mouse_speed_set = 0;
 
 };
 

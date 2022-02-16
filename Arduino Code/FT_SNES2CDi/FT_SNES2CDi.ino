@@ -63,7 +63,7 @@ void loop()
   digitalWrite(ledPin, LOW);
 
 	// Get the state of the SNES pad buttons
-	btns = pad.buttons();
+	btns = pad.buttons(SNES_MOUSE_FAST);
   bool isMouse = (btns & SNES_PAD_ID_0);
 
   // manage speed control
