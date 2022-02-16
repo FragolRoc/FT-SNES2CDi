@@ -64,6 +64,12 @@ uint32_t SNESpad::buttons(int speed)
   mouse_speed = ((~ret & SNES_MOUSE_SPEED) >> 10);
   if (mouse_speed > 2) mouse_speed = 0;
 
+  // verify controller or mouse is connected
+  if (!ret) {
+    if (mouse_speed_set) mouse_speed_set = 0;
+    return 0;
+  }
+
   return ~ret;
 }
 
