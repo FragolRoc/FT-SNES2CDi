@@ -132,18 +132,6 @@ void loop()
       padbyte0 = padbyte0 | 0b00001000;
   }
 
-  // MOUSE DEBUG
-  if (debugging && (x != 127 || y != 127)) {
-    String xDirection = "";
-    if (btns & SNES_MOUSE_X_SIGN) xDirection = "< ";
-    else xDirection = "> ";
-    String yDirection = "";
-    if (btns & SNES_MOUSE_Y_SIGN) yDirection = "/\\ ";
-    else yDirection = "\\/ ";
-    byte TwosComplement = ~x + 1;
-    Serial.println("{ x: " + xDirection + String(TwosComplement) + ", y: " + yDirection + String(y) + " }");
-  }
-
   // buttons
   if(btns & SNES_SELECT) {
     if(!btnSEpressed) standardMapping = !standardMapping; // mapping change : invert buttons 1 & 2 (Y & B)
@@ -173,6 +161,16 @@ void loop()
     if(assertRTS()) vSerial.write(padbyte0);
     if(assertRTS()) vSerial.write(padbyte1);
     if(assertRTS()) vSerial.write(padbyte2);
+
+    // DEBUG
+    if (debugging && (x != 127 || y != 127)) {
+      int xDelta = x, yDelta = y;
+      if (btns & SNES_MOUSE_X_SIGN) xDelta = (xDelta - 255);
+      if (!(btns & SNES_MOUSE_Y_SIGN)) yDelta = (yDelta - 255);
+      if (xDelta == 127) xDelta = 0;
+      if (yDelta == 127) yDelta = 0;
+      Serial.println("{ x: " + String(xDelta) + ",\ty: " + String(yDelta) + " }");
+    }
   }
 
   // save state
