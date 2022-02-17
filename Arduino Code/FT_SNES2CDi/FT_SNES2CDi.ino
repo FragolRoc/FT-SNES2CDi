@@ -91,13 +91,7 @@ void loop()
     x = adjustSpeed(x);
   } else { // mouse
     x = 0;
-    if (btns & SNES_MOUSE_X_0) x = x + 1;
-    if (btns & SNES_MOUSE_X_1) x = x + 2;
-    if (btns & SNES_MOUSE_X_2) x = x + 4;
-    if (btns & SNES_MOUSE_X_3) x = x + 8;
-    if (btns & SNES_MOUSE_X_4) x = x + 16;
-    if (btns & SNES_MOUSE_X_5) x = x + 32;
-    if (btns & SNES_MOUSE_X_6) x = x + 64;
+    if (btns & SNES_MOUSE_X) x = (btns & SNES_MOUSE_X) >> 25;
     if (btns & SNES_MOUSE_X_SIGN) x = 127 + x;
     else x = 127 - x;
   }
@@ -120,13 +114,7 @@ void loop()
     y = adjustSpeed(y);
   } else { // mouse
     y = 0;
-    if (btns & SNES_MOUSE_Y_0) y = y + 1;
-    if (btns & SNES_MOUSE_Y_1) y = y + 2;
-    if (btns & SNES_MOUSE_Y_2) y = y + 4;
-    if (btns & SNES_MOUSE_Y_3) y = y + 8;
-    if (btns & SNES_MOUSE_Y_4) y = y + 16;
-    if (btns & SNES_MOUSE_Y_5) y = y + 32;
-    if (btns & SNES_MOUSE_Y_6) y = y + 64;
+    if (btns & SNES_MOUSE_Y) y = (btns & SNES_MOUSE_Y) >> 17;
     if (btns & SNES_MOUSE_Y_SIGN) y = 127 + y;
     else y = 127 - y;
   }
