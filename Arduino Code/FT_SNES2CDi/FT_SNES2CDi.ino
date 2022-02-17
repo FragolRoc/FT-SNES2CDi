@@ -64,7 +64,8 @@ void loop()
 
 	// Get the state of the SNES pad buttons
 	btns = pad.buttons(SNES_MOUSE_FAST);
-  bool isMouse = (btns & SNES_PAD_ID_0);
+  bool isController = ((btns & SNES_DEVICE_ID) >> 12) == SNES_PAD_ID;
+  bool isMouse = ((btns & SNES_DEVICE_ID) >> 12) == SNES_MOUSE_ID;
 
   // manage speed control
   if(btns & SNES_R) {
@@ -83,15 +84,16 @@ void loop()
   padbyte1 = 0b10000000;
   padbyte2 = 0b10000000;
 
-  // Dpad X axis
+  // Dpad or Mouse X axis
   x = 127;
-  if (!isMouse) { // controller
+  if (isController) {
     if(btns & SNES_LEFT) x = 254;
     if(btns & SNES_RIGHT) x = 1;
     x = adjustSpeed(x);
-  } else { // mouse
+  }
+  if (isMouse) {
     x = 0;
-    if (btns & SNES_MOUSE_X) x = (btns & SNES_MOUSE_X) >> 25;
+    x = (btns & SNES_MOUSE_X) >> 25;
     if (btns & SNES_MOUSE_X_SIGN) x = 127 + x;
     else x = 127 - x;
   }
@@ -106,13 +108,14 @@ void loop()
       padbyte0 = padbyte0 | 0b00000010;
   }
 
-  // Dpad Y axis
+  // Dpad or Mouse Y axis
   y = 127;
-  if (!isMouse) { // controller
+  if (isController) {
     if(btns & SNES_UP) y = 254;
     if(btns & SNES_DOWN) y = 1;
     y = adjustSpeed(y);
-  } else { // mouse
+  }
+  if (isMouse) {
     y = 0;
     if (btns & SNES_MOUSE_Y) y = (btns & SNES_MOUSE_Y) >> 17;
     if (btns & SNES_MOUSE_Y_SIGN) y = 127 + y;
@@ -148,7 +151,7 @@ void loop()
   }
   else btnSEpressed = false;
 
-  if (!isMouse) {
+  if (isController) {
     if(standardMapping) {
       if(btns & SNES_Y) padbyte0 = padbyte0 | 0b00100000;  //button 1 (Y)
       if(btns & SNES_B) padbyte0 = padbyte0 | 0b00010000;  //button 2 (B)
@@ -158,7 +161,9 @@ void loop()
       if(btns & SNES_Y) padbyte0 = padbyte0 | 0b00010000;  //button 2 (Y)
     }
     if((btns & SNES_X) || (btns & SNES_A)) padbyte0 = padbyte0 | 0b00110000; // button 3 (A or X)
-  } else {
+  }
+
+  if (isMouse) {
     if(btns & SNES_X) padbyte0 = padbyte0 | 0b00100000; // button 1 (X)
     if(btns & SNES_A) padbyte0 = padbyte0 | 0b00010000; // button 2 (A)
   }
