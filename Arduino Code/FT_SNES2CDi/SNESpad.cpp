@@ -47,49 +47,66 @@ SNESpad::SNESpad(int strobe, int clock, int data)
     pinMode(data, INPUT);
   }
 
-uint32_t SNESpad::buttons(int speed)
+uint32_t SNESpad::buttons(int m_speed)
 {
   uint32_t ret = 0;
   byte i;
 
-  strobe(speed);
+  strobe(m_speed);
   for (i = 0; i < 32; i++) {
     uint32_t shiftBit = shiftin();
     ret |= shiftBit << i;
 
-    // stop read if not a mouse
-    if (i == 15 && shiftBit) break;
+    // verify if device is a mouse or not
+    if (i == 15) {
+      mouse = !shiftBit;
+      if (!mouse) break;
+    }
   }
-
-  mouse_speed = ((~ret & SNES_MOUSE_SPEED) >> 10);
-  if (mouse_speed > 2) mouse_speed = 0;
 
   // verify controller or mouse is connected
   if (!ret) {
-    if (mouse_speed_set) mouse_speed_set = 0;
+    mouse_speed_fail = 0;
+    mouse_speed = 0;
     return 0;
+  }
+
+  // verify mouse speed
+  if (mouse) {
+    int last_mouse_speed = mouse_speed;
+
+    // parse mouse speed bits
+    mouse_speed = ((~ret & SNES_MOUSE_SPEED) >> 10);
+    if (mouse_speed > 2) mouse_speed = 0;
+
+    // detect hyperkin mouse failure to change speed to halt further attempts
+    if (
+      mouse_speed != m_speed
+      && last_mouse_speed == mouse_speed
+      && mouse_speed_fail < SNES_MOUSE_FAIL_THRESHOLD
+    ) {
+        mouse_speed_fail++;
+    }
   }
 
   return ~ret;
 }
 
-void SNESpad::strobe(int speed)
+void SNESpad::strobe(int m_speed)
 {
-  byte j;
   digitalWrite(m_strobe,HIGH);
   delayMicroseconds(12);
 
-  if (mouse_speed >= 0 && mouse_speed_set < 3) {
-    if (mouse_speed != speed) {
-      digitalWrite(m_clock,LOW);
-      delayMicroseconds(6);
-      digitalWrite(m_clock,HIGH);
-      delayMicroseconds(12);
-
-      mouse_speed_set++;
-    } else {
-      mouse_speed_set = 3;
-    }
+  // signal mouse to go to next speed if not desired speed
+  if (
+    mouse == true
+    && mouse_speed != m_speed
+    && mouse_speed_fail < SNES_MOUSE_FAIL_THRESHOLD
+  ) {
+    digitalWrite(m_clock,LOW);
+    delayMicroseconds(6);
+    digitalWrite(m_clock,HIGH);
+    delayMicroseconds(12);
   }
 
   digitalWrite(m_strobe,LOW);

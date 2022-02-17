@@ -63,6 +63,8 @@
 #define SNES_MOUSE_MEDIUM   1
 #define SNES_MOUSE_FAST     2
 
+#define SNES_MOUSE_FAIL_THRESHOLD 3
+
 class SNESpad {
 
   public:
@@ -74,7 +76,8 @@ class SNESpad {
     void strobe(int speed);
     uint32_t shiftin();
     int m_strobe, m_clock, m_data;
-    int mouse_speed = -1, mouse_speed_set = 0;
+    int mouse_speed = 0, mouse_speed_fail = 0;
+    bool mouse = false;
 
 };
 
