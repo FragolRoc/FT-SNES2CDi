@@ -93,7 +93,10 @@ void loop()
   }
   if (isMouse) {
     x = 0;
-    x = (btns & SNES_MOUSE_X) >> 25;
+    if (btns & SNES_MOUSE_X) {
+      x = (btns & SNES_MOUSE_X) >> 25;
+      x = flipByte(x);
+    }
     if (btns & SNES_MOUSE_X_SIGN) x = 127 + x;
     else x = 127 - x;
   }
@@ -117,7 +120,10 @@ void loop()
   }
   if (isMouse) {
     y = 0;
-    if (btns & SNES_MOUSE_Y) y = (btns & SNES_MOUSE_Y) >> 17;
+    if (btns & SNES_MOUSE_Y) {
+      y = (btns & SNES_MOUSE_Y) >> 17;
+      y = flipByte(y);
+    }
     if (btns & SNES_MOUSE_Y_SIGN) y = 127 + y;
     else y = 127 - y;
   }
@@ -212,4 +218,14 @@ void changeSpeed(byte newspeed)
   
   spd=newspeed;
   EEPROM.write(0, spd);
+}
+
+byte flipByte(byte c){
+  char r=0;
+  for(byte i = 0; i < 8; i++){
+    r <<= 1;
+    r |= c & 1;
+    c >>= 1;
+  }
+  return r;
 }
