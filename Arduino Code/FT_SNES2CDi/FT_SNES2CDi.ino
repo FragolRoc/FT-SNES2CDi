@@ -16,9 +16,10 @@
 #include "SNESpad.h"
 #include <EEPROM.h>
 
-SNESpad pad = SNESpad(5, 6, 7); // Create a SNESpad instance, change the pin values to match your wiring (latch, clock, data)
+SNESpad padA = SNESpad(A4, A5, 2);
+SNESpad padB = SNESpad(A3, A2, 7); // Create a SNESpad instance, change the pin values to match your wiring (latch, clock, data)
 SoftwareSerial vSerial(8, 10, true); // RX, TX, inverse_logic. RX is not used here, as the CDi only communicates on the RTS line
-const int RTSpin = 5; // the number of the analog pin used to receive the RTS signal from the CDi
+const int RTSpin = 6; // the number of the analog pin used to receive the RTS signal from the CDi
 const int ledPin = 13; // the number of the inboard LED pin
 
 const int RTSthreshold = 328; // threshold for the CDi RTS analog detection
@@ -63,7 +64,9 @@ void loop()
   digitalWrite(ledPin, LOW);
 
 	// Get the state of the SNES pad buttons
-	btns = pad.buttons(SNES_MOUSE_FAST);
+	btns = padB.buttons(SNES_MOUSE_FAST);
+  if (!btns) btns = padA.buttons(SNES_MOUSE_FAST);
+
   bool isController = ((btns & SNES_DEVICE_ID) >> 12) == SNES_PAD_ID;
   bool isMouse = ((btns & SNES_DEVICE_ID) >> 12) == SNES_MOUSE_ID;
 
