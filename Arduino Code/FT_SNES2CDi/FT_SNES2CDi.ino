@@ -35,9 +35,6 @@ void setup()
 // main
 void loop()
 {
-  padA.task();
-  padB.task();
-
 	// Get the state of the SNES pad buttons
   uint32_t snesBtnsA = snesPadA.buttons(SNES_MOUSE_FAST);
   uint32_t snesBtnsB = snesPadB.buttons(SNES_MOUSE_FAST);
@@ -48,16 +45,20 @@ void loop()
   if (!snesBtnsB) digitalWrite(ledB, LOW);
   else digitalWrite(ledB, HIGH);
 
+  bool splitter = !!(snesBtnsA && snesBtnsB);
   if (snesBtnsA && !snesBtnsB) {
     padA.snes2cdi(snesBtnsA);
   } else if (!snesBtnsA && snesBtnsB) {
     padA.snes2cdi(snesBtnsB);
-  } else if (snesBtnsA && snesBtnsB) {
+  } else if (splitter) {
     padA.snes2cdi(snesBtnsB);
     padB.snes2cdi(snesBtnsA);
   }
 
+  padA.task();
+  if (splitter) padB.task();
+
   padA.send();
-  if (snesBtnsA && snesBtnsB) padB.send();
+  if (splitter) padB.send();
   
 }
