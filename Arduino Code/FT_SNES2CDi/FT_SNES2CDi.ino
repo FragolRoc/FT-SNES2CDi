@@ -48,12 +48,12 @@ void loop()
   // Translate SNES data to CDi data bytes
   bool splitter = !!(snesBtnsA && snesBtnsB);
   if (snesBtnsA && !snesBtnsB) {
-    padA.snes2cdi(snesBtnsA);
+    padA.snesToCDi(snesBtnsA);
   } else if (!snesBtnsA && snesBtnsB) {
-    padA.snes2cdi(snesBtnsB);
+    padA.snesToCDi(snesBtnsB);
   } else if (splitter) {
-    padA.snes2cdi(snesBtnsB);
-    padB.snes2cdi(snesBtnsA);
+    padA.snesToCDi(snesBtnsB);
+    padB.snesToCDi(snesBtnsA);
   }
 
   // Assert device and send data bytes

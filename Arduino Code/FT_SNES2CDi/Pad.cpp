@@ -55,7 +55,7 @@ void Pad::send()
   oldpadbyte2 = padbyte2;
 }
 
-void Pad::snes2cdi(uint32_t btns)
+void Pad::snesToCDi(uint32_t btns)
 {
   bool isController = ((btns & SNES_DEVICE_ID) >> 12) == SNES_PAD_ID;
   bool isMouse = ((btns & SNES_DEVICE_ID) >> 12) == SNES_MOUSE_ID;
@@ -77,68 +77,28 @@ void Pad::snes2cdi(uint32_t btns)
   padbyte1 = 0b10000000;
   padbyte2 = 0b10000000;
 
-  // Dpad or Mouse X axis
-  x = 127;
+  x = 127;  //set center position [0-255]
+  y = 127;
+
+  //translate snes controller to cdi maneuvering device
   if (isController) {
+    // Dpad X axis
     if(btns & SNES_LEFT) x = 254;
     if(btns & SNES_RIGHT) x = 1;
     x = adjustSpeed(x);
-  }
-  if (isMouse) {
-    x = 0;
-    if (btns & SNES_MOUSE_X) {
-      x = (btns & SNES_MOUSE_X) >> 25;
-      x = flipByte(x);
-    }
-    if (btns & SNES_MOUSE_X_SIGN) x = 127 + x;
-    else x = 127 - x;
-  }
-  
-  if(x!=127) {
-    x = x ^ 0b01111111;
-    padbyte1 = padbyte1 | x;
-    padbyte1 = padbyte1 & 0b10111111;
-    if((x & 0b01000000) != 0)
-      padbyte0 = padbyte0 | 0b00000001;
-    if((x & 0b10000000) != 0)
-      padbyte0 = padbyte0 | 0b00000010;
-  }
 
-  // Dpad or Mouse Y axis
-  y = 127;
-  if (isController) {
+    // Dpad Y axis
     if(btns & SNES_UP) y = 254;
     if(btns & SNES_DOWN) y = 1;
     y = adjustSpeed(y);
-  }
-  if (isMouse) {
-    y = 0;
-    if (btns & SNES_MOUSE_Y) {
-      y = (btns & SNES_MOUSE_Y) >> 17;
-      y = flipByte(y);
+
+    // buttons
+    if(btns & SNES_SELECT) {
+      if(!btnSEpressed) standardMapping = !standardMapping; // mapping change : invert buttons 1 & 2 (Y & B)
+      btnSEpressed = true;
     }
-    if (btns & SNES_MOUSE_Y_SIGN) y = 127 + y;
-    else y = 127 - y;
-  }
+    else btnSEpressed = false;
 
-  if(y!=127) {
-    y = y ^ 0b01111111;
-    padbyte2 = padbyte2 | y;
-    padbyte2 = padbyte2 & 0b10111111;
-    if((y & 0b01000000) != 0)
-      padbyte0 = padbyte0 | 0b00000100;
-    if((y & 0b10000000) != 0)
-      padbyte0 = padbyte0 | 0b00001000;
-  }
-
-  // buttons
-  if(btns & SNES_SELECT) {
-    if(!btnSEpressed) standardMapping = !standardMapping; // mapping change : invert buttons 1 & 2 (Y & B)
-    btnSEpressed = true;
-  }
-  else btnSEpressed = false;
-
-  if (isController) {
     if(standardMapping) {
       if(btns & SNES_Y) padbyte0 = padbyte0 | 0b00100000;  //button 1 (Y)
       if(btns & SNES_B) padbyte0 = padbyte0 | 0b00010000;  //button 2 (B)
@@ -152,11 +112,50 @@ void Pad::snes2cdi(uint32_t btns)
     mode = MANEUVER;
   }
 
+  //translate snes mouse to cdi relative device
   if (isMouse) {
+    // Mouse X axis
+    x = 0;
+    if (btns & SNES_MOUSE_X) {
+      x = (btns & SNES_MOUSE_X) >> 25;
+      x = flipByte(x);
+    }
+    if (btns & SNES_MOUSE_X_SIGN) x = 127 + x;
+    else x = 127 - x;
+
+    // Mouse Y axis
+    y = 0;
+    if (btns & SNES_MOUSE_Y) {
+      y = (btns & SNES_MOUSE_Y) >> 17;
+      y = flipByte(y);
+    }
+    if (btns & SNES_MOUSE_Y_SIGN) y = 127 + y;
+    else y = 127 - y;
+
     if(btns & SNES_X) padbyte0 = padbyte0 | 0b00100000; // button 1 (X)
     if(btns & SNES_A) padbyte0 = padbyte0 | 0b00010000; // button 2 (A)
 
     mode = RELATIVE;
+  }
+
+  // sets x/y axis bytes
+  if(x!=127) {
+    x = x ^ 0b01111111;
+    padbyte1 = padbyte1 | x;
+    padbyte1 = padbyte1 & 0b10111111;
+    if((x & 0b01000000) != 0)
+      padbyte0 = padbyte0 | 0b00000001;
+    if((x & 0b10000000) != 0)
+      padbyte0 = padbyte0 | 0b00000010;
+  }
+  if(y!=127) {
+    y = y ^ 0b01111111;
+    padbyte2 = padbyte2 | y;
+    padbyte2 = padbyte2 & 0b10111111;
+    if((y & 0b01000000) != 0)
+      padbyte0 = padbyte0 | 0b00000100;
+    if((y & 0b10000000) != 0)
+      padbyte0 = padbyte0 | 0b00001000;
   }
 }
 

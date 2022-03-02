@@ -14,7 +14,7 @@ class Pad {
     Pad(int rts, int rxd);
     void task();
     void send();
-    void snes2cdi(uint32_t btns);
+    void snesToCDi(uint32_t btns);
 
   private:
     SoftwareSerial vSerial;
