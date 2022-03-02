@@ -18,13 +18,17 @@
 
 SNESpad snesPadA = SNESpad(A4, A5, 2); // Create a SNESpad instance, change the pin values to match your wiring (latch, clock, data)
 SNESpad snesPadB = SNESpad(A3, A2, 7);
-Pad padA = Pad(6, 10, 13); // RTSpin, RXDpin, LEDpin
-Pad padB = Pad(7, 9, 14);
+Pad padA = Pad(6, 10); // RTSpin, RXDpin
+Pad padB = Pad(7, 9);
+const int ledA = 8;
+const int ledB = 13;
 bool debugging = false;
 
 // init
 void setup()
 {
+  pinMode(ledA, OUTPUT);
+  pinMode(ledB, OUTPUT);
   if (debugging) Serial.begin(38400);
 }
 
@@ -37,6 +41,12 @@ void loop()
 	// Get the state of the SNES pad buttons
   uint32_t snesBtnsA = snesPadA.buttons(SNES_MOUSE_FAST);
   uint32_t snesBtnsB = snesPadB.buttons(SNES_MOUSE_FAST);
+
+  // LED connected status
+  if (!snesBtnsA) digitalWrite(ledA, LOW);
+  else digitalWrite(ledA, HIGH);
+  if (!snesBtnsB) digitalWrite(ledB, LOW);
+  else digitalWrite(ledB, HIGH);
 
   if (snesBtnsA && !snesBtnsB) {
     padA.snes2cdi(snesBtnsA);

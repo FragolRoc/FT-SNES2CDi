@@ -9,7 +9,7 @@
 class Pad {
 
   public:
-    Pad(int rts, int rxd, int led);
+    Pad(int rts, int rxd);
     void task();
     void send();
     void snes2cdi(uint32_t btns);

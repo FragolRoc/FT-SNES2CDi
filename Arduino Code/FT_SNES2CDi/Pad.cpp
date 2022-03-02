@@ -7,12 +7,10 @@
 const int RTSthreshold = 328; // threshold for the CDi RTS analog detection
 
 // constructor
-Pad::Pad(int rts, int rxd, int led)
+Pad::Pad(int rts, int rxd)
   : RTSpin (rts), // the number of the analog pin used to receive the RTS signal from the CDi
-  vSerial(11, rxd, true), // RX, TX, inverse_logic. RX is not used here, as the CDi only communicates on the RTS line
-  LEDpin (led)  // the number of the inboard LED pin
+  vSerial(11, rxd, true) // RX, TX, inverse_logic. RX is not used here, as the CDi only communicates on the RTS line
   {
-    pinMode(led, OUTPUT);
     vSerial.begin(1200); // open serial interface to send data to the CDi
 
     oldpadbyte0 = 0;
@@ -32,14 +30,11 @@ void Pad::task()
       else delay(1);
       firstId = false;
 
-      vSerial.write(0b11001101); // send device id ("relative device")  
-
+      vSerial.write(0b11001101); // send device id ("relative device")
       connected = true;
-      digitalWrite(LEDpin, HIGH);
     }
   } else {
     connected = false;
-    digitalWrite(LEDpin, LOW);
   }
 }
 
