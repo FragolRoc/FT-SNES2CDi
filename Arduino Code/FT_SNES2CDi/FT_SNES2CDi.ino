@@ -45,6 +45,7 @@ void loop()
   if (!snesBtnsB) digitalWrite(ledB, LOW);
   else digitalWrite(ledB, HIGH);
 
+  // Translate SNES data to CDi data bytes
   bool splitter = !!(snesBtnsA && snesBtnsB);
   if (snesBtnsA && !snesBtnsB) {
     padA.snes2cdi(snesBtnsA);
@@ -55,6 +56,7 @@ void loop()
     padB.snes2cdi(snesBtnsA);
   }
 
+  // Assert device and send data bytes
   padA.task();
   if (splitter) padB.task();
 

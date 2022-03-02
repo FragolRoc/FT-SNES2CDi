@@ -5,6 +5,8 @@
 #include <SoftwareSerial.h>
 #include "Arduino.h"
 
+#define RELATIVE   0b11001101 // Relative Device (Mouse)
+#define MANEUVER   0b11001010 // Maneuvering Device (Controller)
 
 class Pad {
 
@@ -13,7 +15,6 @@ class Pad {
     void task();
     void send();
     void snes2cdi(uint32_t btns);
-    uint32_t snesButtons;
 
   private:
     SoftwareSerial vSerial;
@@ -30,6 +31,7 @@ class Pad {
     bool btnSEpressed = false;
     bool standardMapping = true;
     bool connected = false;
+    byte mode = MANEUVER;
 };
 
 #endif

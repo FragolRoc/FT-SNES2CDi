@@ -30,7 +30,7 @@ void Pad::task()
       else delay(1);
       firstId = false;
 
-      vSerial.write(0b11001101); // send device id ("relative device")
+      vSerial.write(mode);
       connected = true;
     }
   } else {
@@ -57,7 +57,6 @@ void Pad::send()
 
 void Pad::snes2cdi(uint32_t btns)
 {
-  snesButtons = btns;
   bool isController = ((btns & SNES_DEVICE_ID) >> 12) == SNES_PAD_ID;
   bool isMouse = ((btns & SNES_DEVICE_ID) >> 12) == SNES_MOUSE_ID;
 
@@ -149,11 +148,15 @@ void Pad::snes2cdi(uint32_t btns)
       if(btns & SNES_Y) padbyte0 = padbyte0 | 0b00010000;  //button 2 (Y)
     }
     if((btns & SNES_X) || (btns & SNES_A)) padbyte0 = padbyte0 | 0b00110000; // button 3 (A or X)
+
+    mode = MANEUVER;
   }
 
   if (isMouse) {
     if(btns & SNES_X) padbyte0 = padbyte0 | 0b00100000; // button 1 (X)
     if(btns & SNES_A) padbyte0 = padbyte0 | 0b00010000; // button 2 (A)
+
+    mode = RELATIVE;
   }
 }
 
