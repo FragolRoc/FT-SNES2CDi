@@ -58,5 +58,6 @@ void loop()
   }
 
   padA.send();
-  padB.send();
+  if (snesBtnsA && snesBtnsB) padB.send();
+  
 }
