@@ -29,6 +29,7 @@ class Pad {
     bool btnLpressed = false;
     bool btnRpressed = false;
     bool btnSEpressed = false;
+    bool btnSTpressed = false;
     bool standardMapping = true;
     bool connected = false;
     byte mode = MANEUVER;

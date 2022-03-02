@@ -61,19 +61,6 @@ void Pad::snesToCDi(uint32_t btns)
   bool isMouse = ((btns & SNES_DEVICE_ID) >> 12) == SNES_MOUSE_ID;
   bool isNES = ((btns >> 8) & 0b11111111) == 0b11111111;
 
-  // manage speed control
-  if(btns & SNES_R) {
-    if(!btnRpressed) changeSpeed(spd+1); // speed : up
-    btnRpressed = true;
-  }
-  else btnRpressed = false;
-  if(btns & SNES_L) {
-    if(!btnLpressed) changeSpeed(spd-1); // speed : down
-    btnLpressed = true;
-  }
-  else btnLpressed = false;
-  if(btns & SNES_START) changeSpeed(3); // speed : default (3)
-
   padbyte0 = 0b11000000;  //initialize data bytes
   padbyte1 = 0b10000000;
   padbyte2 = 0b10000000;
@@ -98,6 +85,19 @@ void Pad::snesToCDi(uint32_t btns)
 
   // snes controller buttons
   if (isController) {
+    // manage speed control
+    if(btns & SNES_R) {
+      if(!btnRpressed) changeSpeed(spd+1); // speed : up
+      btnRpressed = true;
+    }
+    else btnRpressed = false;
+    if(btns & SNES_L) {
+      if(!btnLpressed) changeSpeed(spd-1); // speed : down
+      btnLpressed = true;
+    }
+    else btnLpressed = false;
+    if(btns & SNES_START) changeSpeed(3); // speed : default (3)
+
     if(btns & SNES_SELECT) {
       if(!btnSEpressed) standardMapping = !standardMapping; // mapping change : invert buttons 1 & 2 (Y & B)
       btnSEpressed = true;
@@ -117,6 +117,18 @@ void Pad::snesToCDi(uint32_t btns)
 
   // nes controller buttons
   if (isNES) {
+    if(btns & SNES_SELECT) {
+      if(!btnSEpressed) changeSpeed(spd-1); // speed : down
+      btnSEpressed = true;
+    }
+    else btnSEpressed = false;
+
+    if(btns & SNES_START) {
+      if(!btnSTpressed) changeSpeed(spd+1); // speed : up
+      btnSTpressed = true;
+    }
+    else btnSTpressed = false;
+
     if(btns & SNES_Y) padbyte0 = padbyte0 | 0b00100000;  //button 1 (B)
     if(btns & SNES_B) padbyte0 = padbyte0 | 0b00010000;  //button 2 (A)
   }
