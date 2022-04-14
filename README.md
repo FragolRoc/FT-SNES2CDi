@@ -23,7 +23,7 @@ Please note that Nano clones may require a different configuration in the Arduin
 
 **PCB designs can be found at:**
   <br>OSH Park: https://oshpark.com/shared_projects/f0KiejEZ
-  <br>EasyEDA:
+  <br>EasyEDA: https://oshwlab.com/fragolroc/cdi2snes
 
 **Arduino Nano (Clone):** <br>
 https://bit.ly/3HXlJSC
